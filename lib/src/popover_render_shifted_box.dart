@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'popover_direction.dart';
@@ -13,6 +14,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
   List<BoxShadow>? _boxShadow;
   double? _scale;
   double? _radius;
+  BorderSide? _border;
 
   PopoverRenderShiftedBox({
     required Rect attachRect,
@@ -24,6 +26,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
     double? scale,
     double? radius,
     PopoverDirection? direction,
+    BorderSide? border,
   }) : super(child) {
     _attachRect = attachRect;
     _color = color;
@@ -31,9 +34,11 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
     _scale = scale;
     _radius = radius;
     _direction = direction;
+    _border = border;
   }
 
   Rect get attachRect => _attachRect;
+
   set attachRect(Rect value) {
     if (_attachRect == value) return;
     _attachRect = value;
@@ -41,13 +46,23 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
   }
 
   List<BoxShadow>? get boxShadow => _boxShadow;
+
   set boxShadow(List<BoxShadow>? value) {
     if (_boxShadow == value) return;
     _boxShadow = value;
     markNeedsLayout();
   }
 
+  BorderSide? get border => _border;
+
+  set border(BorderSide? value) {
+    if (_border == value) return;
+    _border = value;
+    markNeedsLayout();
+  }
+
   Color? get color => _color;
+
   set color(Color? value) {
     if (_color == value) return;
     _color = value;
@@ -55,6 +70,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
   }
 
   PopoverDirection? get direction => _direction;
+
   set direction(PopoverDirection? value) {
     if (_direction == value) return;
     _direction = value;
@@ -62,6 +78,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
   }
 
   double? get radius => _radius;
+
   set radius(double? value) {
     if (_radius == value) return;
     _radius = value;
@@ -69,6 +86,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
   }
 
   double? get scale => _scale;
+
   set scale(double? value) {
     _scale = value;
     markNeedsLayout();
@@ -141,6 +159,8 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
       PopoverPath(radius!).draw(_direction, arrowRect, bodyRect),
       transform,
     );
+
+    _paintBorder(context, transform, offset, _direction, arrowRect, bodyRect);
   }
 
   @override
@@ -255,5 +275,29 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
     transform.translate(translation.dx, translation.dy);
     transform.scale(scale, scale, 1);
     transform.translate(-translation.dx, -translation.dy);
+  }
+
+  void _paintBorder(
+    PaintingContext context,
+    Matrix4 transform,
+    Offset offset,
+    PopoverDirection direction,
+    Rect? arrowRect,
+    Rect bodyRect,
+  ) {
+    if (border == null) return;
+    final paint = Paint()
+      ..color = border!.color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = border!.width;
+    final path = PopoverPath(radius!)
+        .draw(_direction, arrowRect!.shift(offset), bodyRect.shift(offset));
+
+    context.pushTransform(needsCompositing, offset, transform, (
+      context,
+      offset,
+    ) {
+      context.canvas.drawPath(path, paint);
+    });
   }
 }

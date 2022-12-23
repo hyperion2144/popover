@@ -83,6 +83,10 @@ Future<T?> showPopover<T extends Object?>({
   List<BoxShadow> shadow = const [
     BoxShadow(color: Color(0x1F000000), blurRadius: 5)
   ],
+  BorderSide borderSide = const BorderSide(
+    width: 1,
+    color: Color(0xFF000000),
+  ),
   double arrowWidth = 24,
   double arrowHeight = 12,
   double arrowDxOffset = 0,
@@ -124,6 +128,7 @@ Future<T?> showPopover<T extends Object?>({
             direction: direction,
             radius: radius,
             boxShadow: shadow,
+            borderSide: borderSide,
             animation: animation,
             arrowWidth: arrowWidth,
             arrowHeight: arrowHeight,

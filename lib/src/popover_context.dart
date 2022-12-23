@@ -10,6 +10,7 @@ class PopoverContext extends SingleChildRenderObjectWidget {
   final Rect attachRect;
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
+  final BorderSide? borderSide;
   final double? radius;
   final PopoverDirection? direction;
   final double? arrowWidth;
@@ -21,6 +22,7 @@ class PopoverContext extends SingleChildRenderObjectWidget {
     required this.attachRect,
     required this.arrowHeight,
     super.child,
+    this.borderSide,
     this.backgroundColor,
     this.boxShadow,
     this.radius,
@@ -39,6 +41,7 @@ class PopoverContext extends SingleChildRenderObjectWidget {
       radius: radius,
       arrowWidth: arrowWidth,
       arrowHeight: arrowHeight,
+      border: borderSide,
     );
   }
 
@@ -55,6 +58,7 @@ class PopoverContext extends SingleChildRenderObjectWidget {
       ..direction = direction
       ..radius = radius
       ..arrowWidth = arrowWidth
-      ..arrowHeight = arrowHeight;
+      ..arrowHeight = arrowHeight
+      ..border = borderSide;
   }
 }
