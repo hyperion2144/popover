@@ -70,13 +70,14 @@ class Button extends StatelessWidget {
         onTap: () {
           showPopover(
             context: context,
-            bodyBuilder: (context) => const ListItems(),
+            bodyBuilder: (context) => ListItems(),
             onPop: () => print('Popover was popped!'),
-            direction: PopoverDirection.bottom,
+            direction: PopoverDirection.top,
             width: 200,
             height: 400,
             arrowHeight: 15,
             arrowWidth: 30,
+            borderSide: const BorderSide(width: 0),
           );
         },
       ),
@@ -85,14 +86,18 @@ class Button extends StatelessWidget {
 }
 
 class ListItems extends StatelessWidget {
-  const ListItems({Key? key}) : super(key: key);
+  ListItems({Key? key}) : super(key: key);
+
+  final controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
+      controller: controller,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(
+          controller: controller,
           padding: const EdgeInsets.all(8),
           children: [
             InkWell(

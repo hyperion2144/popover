@@ -152,14 +152,12 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
     _transform(transform, translation);
 
     _paintShadows(context, transform, offset, _direction, arrowRect, bodyRect);
-
     _pushClipPath(
       context,
       offset,
       PopoverPath(radius!).draw(_direction, arrowRect, bodyRect),
       transform,
     );
-
     _paintBorder(context, transform, offset, _direction, arrowRect, bodyRect);
   }
 
@@ -238,7 +236,7 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
           .shift(boxShadow.offset)
           .inflate(boxShadow.spreadRadius);
 
-      final path = PopoverPath(radius!).draw(_direction, arrowRect, bodyRect);
+      final path = PopoverPath(radius!).draw(direction, arrowRect, bodyRect);
 
       context.pushTransform(needsCompositing, offset, transform, (
         context,
@@ -285,13 +283,16 @@ class PopoverRenderShiftedBox extends RenderShiftedBox {
     Rect? arrowRect,
     Rect bodyRect,
   ) {
-    if (border == null) return;
+    if (border == null || border!.style == BorderStyle.none) return;
     final paint = Paint()
       ..color = border!.color
       ..style = PaintingStyle.stroke
       ..strokeWidth = border!.width;
-    final path = PopoverPath(radius!)
-        .draw(_direction, arrowRect!.shift(offset), bodyRect.shift(offset));
+    final path = PopoverPath(radius!).draw(
+      direction,
+      arrowRect!.shift(offset),
+      bodyRect.shift(offset),
+    );
 
     context.pushTransform(needsCompositing, offset, transform, (
       context,
